@@ -24,20 +24,25 @@ class Board extends React.Component {
             column={column} />
         );
     }
+
+    renderBoard() {
+        const {width, height} = this.props;
+
+        this.range(0, height - 1).map(row => (
+            <div className="board-row">
+                {
+                    this.range(row * width, row * width + width - 1)
+                    .map((cell, column) => 
+                        this.renderSquare(row, column, cell))
+                }
+            </div>
+        ))
+    }
     
     render() {
-        const {width, height} = this.props;
         return (
             <div>
-            {
-                this.range(0, height - 1).map(row => (
-                    <div className="board-row">
-                        {
-                            this.range(row * width, row * width + width - 1)
-                                .map((cell, column) => this.renderSquare(row, column, cell))
-                        }
-                    </div>
-                ))}
+                {this.renderBoard()}
             </div>
         );
     }
