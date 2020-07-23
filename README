@@ -1,0 +1,12 @@
+Checkers in pure react
+
+Currently in progress and not yet functional. Board draws and you can select pieces.
+
+TODO:
+-- Implement valid move calculations
+-- Implement move logic
+-- Implement turns
+-- Implement history
+
+Clone, npm install, npm start
+Enjoy!
