@@ -4,9 +4,13 @@ import './index.css';
 import * as CONSTANTS from './constants.js';
 
 
-function Square({piece, row, column}) {
+function Square({piece, pieceState, row, column, clickHandler}) {
+    function handleClick() {
+        clickHandler(piece, row, column);
+    }
+
     return (
-        <button className={row % 2 === column %2 ? "square-red" : "square-black"}>
+        <button className={row % 2 === column %2 ? "square-red" : "square-black"} style={pieceState} onClick={handleClick}>
             {piece}
         </button>
     );
@@ -19,9 +23,11 @@ class Board extends React.Component {
     renderSquare(row, column, cell) {
         return (
             <Square 
-            piece={this.props.squares[cell]} 
+            piece={this.props.squares.pieces[cell]} 
+            pieceState={this.props.squares.state[cell]}
             row={row}
-            column={column} />
+            column={column} 
+            clickHandler={this.props.clickHandler} />
         );
     }
     
@@ -39,7 +45,7 @@ class Board extends React.Component {
     render() {
         return (
             <div>
-            {this.renderBoard()}
+                {this.renderBoard()}
             </div>
         );
     }
@@ -52,13 +58,37 @@ class Game extends React.Component {
         const width = CONSTANTS.BOARD_WIDTH;
         const height = CONSTANTS.BOARD_HEIGHT;
         const armyRows = CONSTANTS.ARMY_ROWS;
-        const initialBoard = 
+        const initialBoardPieces = 
             [...Array(width * armyRows).fill('R'),
             ...Array(width * height - 2 * width * armyRows).fill(null),
             ...Array(width * armyRows).fill('B')
             ];
+        const initialPieceStates = Array(width * height).fill(null);
         this.state = {
-            squares: initialBoard,
+            squares: 
+            {
+                pieces: initialBoardPieces,
+                state: initialPieceStates,
+            },
+            turn: 'R'
+        }
+        this.clickHandler = this.clickHandler.bind(this);
+    }
+
+    clickHandler(piece, row, column)
+    {
+        if (piece == this.state.turn)
+        {
+            const newStates = Array(CONSTANTS.BOARD_WIDTH * CONSTANTS.BOARD_HEIGHT).fill(null);
+            const newPieces = this.state.squares.pieces;
+
+            newStates[row * CONSTANTS.BOARD_WIDTH + column] = {backgroundColor: '#550'}
+            this.setState({
+                squares: {
+                    pieces: newPieces, 
+                    state: newStates,
+                },
+            });
         }
     }
     
@@ -70,10 +100,11 @@ class Game extends React.Component {
                         squares = {this.state.squares} 
                         width = {CONSTANTS.BOARD_WIDTH}
                         height = {CONSTANTS.BOARD_HEIGHT}
-                        armyRows = {CONSTANTS.ARMY_ROWS} />
+                        armyRows = {CONSTANTS.ARMY_ROWS}
+                        clickHandler = {this.clickHandler} />
                 </div>
                 <div className="game-info">
-                    "Placeholder Text"
+                    Current Players turn: {this.state.turn == 'R' ? 'Red' : 'Black'}
                 </div>
             </div>
         );

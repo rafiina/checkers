@@ -24,13 +24,13 @@ ol, ul {
     float: left;
     font-size: 24px;
     font-weight: bold;
-    line-height: 34px;
-    height: 34px;
+    line-height: 39px;
+    height: 39px;
     margin-right: -1px;
     margin-top: -1px;
     padding: 0;
     text-align: center;
-    width: 34px;
+    width: 39px;
 }
 
 .square-black {
@@ -40,20 +40,20 @@ ol, ul {
     float: left;
     font-size: 24px;
     font-weight: bold;
-    line-height: 34px;
-    height: 34px;
+    line-height: 39px;
+    height: 39px;
     margin-right: -1px;
     margin-top: -1px;
     padding: 0;
     text-align: center;
-    width: 34px;
+    width: 39px;
 }
 
-.square:focus {
+.square-red:focus .square-black:focus {
     outline: none;
 }
 
-.kbd-navigation .square:focus {
+.kbd-navigation .square-red:focus .square-black:focus {
     background: #ddd;
 }
 
