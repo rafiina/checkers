@@ -1,94 +1,58 @@
-import { width, height, armyRows, players, boardColors } from './constants.js';
-import { indexToCoordinates, unfold } from './utils.js';
 import React from 'react';
-import {Board} from './board.js';
+import { Board } from './board.js';
+import { createCheckerBoard } from './checkerboard.js'
 
 export class Game extends React.Component {
 
     constructor() {
         super();
+        const initialGameType = 'checkers';
         this.state = {
-            board: this.createBoard(),
-            currentPlayer: 'Player1'
+            board: this.createBoard(initialGameType),
+            currentPlayer: 'Player1',
+            gameType: initialGameType,
         }
-        this.clickHandler = this.clickHandler.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleSelection = this.handleSelection.bind(this);
     }
     
-    createBoard = () =>
-        unfold(
-            (next, done, position) =>
-                position >= width * height  ? done()
-                                            : next(this.createSquareInfo(position), position + 1) 
-            , 0)
-
-
-    squareColor(position) {
-        const {row, column} = indexToCoordinates(position);
-        return column % 2 === row % 2 ? boardColors.first : boardColors.second;
-    }
-
-    createSquareInfo(position) {
-        const piece = this.createPiece(position);
-        const squareColor = this.squareColor(position);
-        const pieceColor = null !== piece ? piece.color : '';
-        return (
-            {
-                piece: piece,
-                classes: `square`,
-                styles: { 
-                    color: `${pieceColor}`,
-                    backgroundColor: `${squareColor}`
-                },
-            }
-        );
-    }
-
-    isPlayer1 = (position) => 
-        position >= 0 && position < armyRows * width ? 'player1' : null;
-    isPlayer2 = (position) => 
-        position >= (height - armyRows) * width && position < width * height ? 'player2' : null;
-
-    createPiece(position) {
-        const {row, column} = indexToCoordinates(position);
-        const player = this.isPlayer1(position) || this.isPlayer2(position)
+    createBoard(gameType) {
+        switch (gameType || 'checkers') {
+            case 'checkers':
+                return createCheckerBoard();
         
-        if (this.squareColor(position) === boardColors.second && null !== player) {
-                return ({
-                    row: row,
-                    column: column,
-                    owner: players[player].man,
-                    color: players[player].color,
-                });
+            default:
+                return null;
         }
-
-        return null;
     }
 
-    GeneratePieces = ( start, stop, piece ) => Array.from(
-        {length: (stop - start)}, 
-        (_, i) => 
-            ({
-                row: indexToCoordinates(start + i).row,
-                column: indexToCoordinates(start + i).column,
-                owner: piece,
-            })
-        );
-
-    clickHandler(row, column)
+    handleClick(piece)
     {
-
+        console.error(piece);
     }
-    
+   
+    handleSelection(e) {
+        this.setState({ 
+            board: this.createBoard(e.target.value),
+            currentPlayer: 'Player1',
+            gameType: e.target.value,
+        });
+    }
+
     render() {
         return (
             <div className="game">
                 <div className="game-board">
                     <Board 
-                        board = {this.state.board}
-                        clickHandler = {this.clickHandler} />
+                        board = { this.state.board }
+                        onClick = { this.handleClick } />
                 </div>
                 <div className="game-info">
-                    Current Players turn: {this.state.currentPlayer}
+                    Current Players turn: { this.state.currentPlayer }
+                    <select name="game-type" defaultValue = { this.state.gameType } onChange={ this.handleSelection }>
+                        <option value="checkers">Checkers</option>
+                        <option value="chess">Chess</option>
+                    </select>
                 </div>
             </div>
         );

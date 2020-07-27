@@ -1,28 +1,29 @@
-import {Square} from './square.js';
+import { Square } from './square.js';
 import React from 'react';
 
 export class Board extends React.Component {
 
-    renderSquare(square, index) {
+    renderSquare(index) {
+        const { board } = this.props;
+
         return (
             <Square
-                key={index}
-                piece={square.piece}
-                classes={square.classes}
-                inlineStyles={square.styles}
-                onClick={() => this.props.clickHandler(1, 2)}
+                key={ index }
+                position={ index }
+                board={ board }
+                onClick={ this.props.onClick }
             >
             </Square>
         );
     }
 
     renderBoard() {
-        const {board} = this.props;
+        const { board } = this.props;
         return (
             <div className="wrapper">
                 {
-                    board.map((square, index) =>
-                        this.renderSquare(square, index))
+                    board.map((_, index) =>
+                        this.renderSquare(index))
                 }
             </div>
         );
@@ -31,7 +32,7 @@ export class Board extends React.Component {
     render() {
         return (
             <div>
-                {this.renderBoard()}
+                { this.renderBoard() }
             </div>
         );
     }
