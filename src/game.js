@@ -1,4 +1,4 @@
-import { width, height, armyRows, player1, player2, boardColors } from './constants.js';
+import { width, height, armyRows, players, boardColors } from './constants.js';
 import { indexToCoordinates, unfold } from './utils.js';
 import React from 'react';
 import {Board} from './board.js';
@@ -43,29 +43,22 @@ export class Game extends React.Component {
         );
     }
 
+    isPlayer1 = (position) => 
+        position >= 0 && position < armyRows * width ? 'player1' : null;
+    isPlayer2 = (position) => 
+        position >= (height - armyRows) * width && position < width * height ? 'player2' : null;
+
     createPiece(position) {
-        const isPlayer1 = (position) => position >= 0 && position < armyRows * width;
-        const isPlayer2 = (position) => position >= (height - armyRows) * width && position < width * height;
         const {row, column} = indexToCoordinates(position);
-
-        if (this.squareColor(position) === boardColors.second) {
-            if (isPlayer1(position)) { 
+        const player = this.isPlayer1(position) || this.isPlayer2(position)
+        
+        if (this.squareColor(position) === boardColors.second && null !== player) {
                 return ({
                     row: row,
                     column: column,
-                    owner: player1.man,
-                    color: player1.color,
+                    owner: players[player].man,
+                    color: players[player].color,
                 });
-            }
-
-            if (isPlayer2(position)) {
-                return ({
-                    row: row,
-                    column: column,
-                    owner: player2.man,
-                    color: player2.color,
-                });
-            }
         }
 
         return null;
