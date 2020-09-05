@@ -1,58 +1,58 @@
 body {
-    /* font: 14px "Century Gothic", Futura, sans-serif; */
-    font: 14px, Arial, Helvetica, sans-serif;
-    margin: 20px;
+  /* font: 14px "Century Gothic", Futura, sans-serif; */
+  font: 14px, Arial, Helvetica, sans-serif;
+  margin: 20px;
 }
 
-ol, ul {
-    padding-left: 30px;
+ol,
+ul {
+  padding-left: 30px;
 }
 
 .board-row:after {
-    clear: both;
-    content: "";
-    display: table;
+  clear: both;
+  content: "";
+  display: table;
 }
 
 .status {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .wrapper {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-gap: 0px;
-    grid-auto-rows: minmax(39px, auto);
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 0px;
+  grid-auto-rows: minmax(39px, auto);
 }
 
-.square{
-    border: 1px solid #999;
-    float: left;
-    font-size: 56px;
-    font-weight: 400;
-    line-height: 39px;
-    height: 100px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 100px;
+.square {
+  border: 1px solid #999;
+  float: left;
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 39px;
+  height: 100px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 100px;
 }
-
 
 .square-red:focus .square-black:focus {
-    outline: none;
+  outline: none;
 }
 
 .kbd-navigation .square-red:focus .square-black:focus {
-    background: #ddd;
+  background: #ddd;
 }
 
 .game {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .game-info {
-    margin-left: 20px;
+  margin-left: 20px;
 }
