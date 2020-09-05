@@ -1,16 +1,18 @@
 import {
-  CheckersMan,
+  CheckersPawn,
   CheckersKing,
 } from "./Components/Games/Checkers/CheckersPieces/checkersPieces.js";
 import { CheckersBoard } from "./Components/Games/Checkers/CheckersBoard/checkersBoard.js";
 
-const pieceTypes = {
-  checkersMan: CheckersMan,
-  checkersKing: CheckersKing,
+export const checkersWidth = 8;
+export const checkersHeight = 8;
+export const checkersArmyRows = 3;
+
+export const pieceTypes = {
+  pawn: CheckersPawn,
+  king: CheckersKing,
 };
 
-const gameBoards = {
+export const gameBoards = {
   checkers: CheckersBoard,
 };
-
-export { pieceTypes, gameBoards };

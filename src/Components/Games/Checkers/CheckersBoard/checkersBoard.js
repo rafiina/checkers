@@ -1,27 +1,121 @@
-import { unfold, indexToCoordinates } from "../../../../utils.js";
+import {
+  unfold,
+  indexToCoordinates,
+  coordinatesToIndex,
+} from "../../../../utils.js";
 import { Square } from "../../../Square/square.js";
 import React from "react";
+import {
+  checkersArmyRows as armyRows,
+  checkersHeight as height,
+  checkersWidth as width,
+} from "../../../../constants.js";
 
-export const width = 8;
-export const height = 8;
-export const armyRows = 3;
-export const players = {
-  player1: { man: "⛀", king: "⛁", color: "#E7ECE4" },
-  player2: { man: "⛂", king: "⛃", color: "#0F1108" },
+const players = {
+  player1: { name: "player1", pawn: "⛀", king: "⛁", color: "#E7ECE4" },
+  player2: { name: "player2", pawn: "⛂", king: "⛃", color: "#0F1108" },
 };
-export const boardColors = { first: "#F0A868", second: "#907F9F" };
+const boardColors = { first: "#F0A868", second: "#907F9F" };
+const pieceShapes = { pawn: "pawn", king: "king" };
 
 export class CheckersBoard extends React.Component {
   constructor() {
     super();
     this.state = {
+      currentPlayer: players.player1,
       board: this.createCheckerBoard(),
+    };
+    this.state = {
+      board: this.getValidMoves(),
     };
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick(piece) {
     console.error(piece);
+  }
+
+  getValidMoves() {
+    const newBoard = this.state.board.map((square, position, board) => {
+      if (null !== square.piece) {
+        const validMoves = this.calculateValidMoves(square.piece);
+        const newPiece = { ...square.piece, validMoves: validMoves };
+        const newSquare = { ...square, piece: newPiece };
+        return newSquare;
+      }
+      return square;
+    });
+    return newBoard;
+  }
+
+  calculateValidMoves(piece) {
+    const pawnPatterns = {
+      player1: {
+        downLeft: { row: 1, column: -1 },
+        downRight: { row: 1, column: 1 },
+      },
+      player2: {
+        upLeft: { row: -1, column: -1 },
+        upRight: { row: -1, column: 1 },
+      },
+    };
+
+    const kingPatterns = {
+      ...pawnPatterns.player1,
+      ...pawnPatterns.player2,
+    };
+
+    const { row: pieceRow, column: pieceColumn } = indexToCoordinates(
+      width,
+      piece.position
+    );
+
+    let validMoves = [];
+    switch (piece.shape) {
+      case pieceShapes.pawn:
+        {
+          const playerMoves = Object.values(pawnPatterns[piece.player.name]);
+          playerMoves.forEach((move) => {
+            const newRow = pieceRow + move["row"];
+            const newColumn = pieceColumn + move["column"];
+            if (this.isValidMove(newRow, newColumn)) {
+              validMoves.push(coordinatesToIndex(width, newRow, newColumn));
+            }
+          });
+        }
+        break;
+      case pieceShapes.king:
+        {
+          const playerMoves = Object.values(kingPatterns);
+          playerMoves.forEach((move) => {
+            const newRow = pieceRow + move["row"];
+            const newColumn = pieceColumn + move["column"];
+            if (this.isValidMove(newRow, newColumn)) {
+              validMoves.push(coordinatesToIndex(width, newRow, newColumn));
+            }
+          });
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    return validMoves;
+  }
+
+  isValidMove(row, column) {
+    return this.isOnBoard(row, column) && this.squareIsEmpty(row, column);
+  }
+
+  isOnBoard(row, column) {
+    return row < width && row >= 0 && column < height && column >= 0;
+  }
+
+  squareIsEmpty(row, column) {
+    return (
+      null === this.state.board[coordinatesToIndex(width, row, column)].piece
+    );
   }
 
   renderSquare(index) {
@@ -79,9 +173,9 @@ export class CheckersBoard extends React.Component {
     position >= (height - armyRows) * width && position < width * height;
   getPlayer = (position) =>
     this.isPlayer1(position)
-      ? players["player1"]
+      ? players.player1
       : this.isPlayer2(position)
-      ? players["player2"]
+      ? players.player2
       : null;
 
   createPiece(position) {
@@ -93,8 +187,9 @@ export class CheckersBoard extends React.Component {
     ) {
       return {
         position: position,
-        type: "checkersMan",
+        shape: pieceShapes.pawn,
         player: player,
+        validMoves: [],
       };
     }
 

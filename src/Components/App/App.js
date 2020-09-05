@@ -14,8 +14,6 @@ export class App extends React.Component {
 
   handleSelection(e) {
     this.setState({
-      board: this.createBoard(e.target.value),
-      currentPlayer: "player1",
       gameBoard: gameBoards[e.target.value],
     });
   }

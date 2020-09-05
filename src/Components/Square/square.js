@@ -4,7 +4,7 @@ import { pieceTypes } from "../../constants.js";
 export function Square({ position, board, onClick }) {
   const square = board[position];
   const GamePiece =
-    null !== square.piece ? pieceTypes[square.piece.type] : null;
+    null !== square.piece ? pieceTypes[square.piece.shape] : null;
 
   return (
     <button
