@@ -21,7 +21,7 @@ ul {
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  /* grid-template-columns: repeat(8, 1fr); */
   grid-gap: 0px;
   grid-auto-rows: minmax(39px, auto);
 }

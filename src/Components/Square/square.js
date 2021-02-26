@@ -7,13 +7,14 @@ export function Square({ position, board, onClick }) {
     null !== square.piece ? pieceTypes[square.piece.shape] : null;
 
   return (
-    <button
-      className={square.classes}
-      onClick={() => onClick(square.piece)}
-      style={square.styles}
-    >
+    <button className={square.classes} style={square.styles}>
       {null !== GamePiece ? (
-        <GamePiece board={board} position={position} piece={square.piece} />
+        <GamePiece
+          board={board}
+          position={position}
+          piece={square.piece}
+          onClick={onClick}
+        />
       ) : null}
     </button>
   );

@@ -17,6 +17,7 @@ const players = {
 };
 const boardColors = { first: "#F0A868", second: "#907F9F" };
 const pieceShapes = { pawn: "pawn", king: "king" };
+const cssStyle = () => ({ gridTemplateColumns: `repeat(${ width }, 1fr)` });
 
 export class CheckersBoard extends React.Component {
   constructor() {
@@ -134,7 +135,7 @@ export class CheckersBoard extends React.Component {
   renderBoard() {
     const { board } = this.state;
     return (
-      <div className="wrapper">
+      <div className="wrapper" style={cssStyle()}>
         {board.map((_, index) => this.renderSquare(index))}
       </div>
     );

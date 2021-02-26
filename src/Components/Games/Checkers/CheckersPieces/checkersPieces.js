@@ -7,8 +7,9 @@ export class CheckersPawn extends React.Component {
 
     this.clickyclick = this.clickyclick.bind(this);
   }
+
   clickyclick() {
-    console.log("Hello");
+    this.props.onClick(this.props.piece);
   }
 
   render() {
